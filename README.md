@@ -15,9 +15,11 @@ Custom map and a greyscale version with red marked points.
 
 Generated Mask for LAT, LONG calculation
 ![Generated Mask](doc/FloorPlan/GeneratedMask.png) 
+
 Generated files for TMS
 ![TMS tiles](doc/FloorPlan/GeneratedTiles.gif)
-Generated LAT, LONG CSV
+
+Generated LAT, LONG
 [CSV output](output.csv)
 
 ## Code Sample
