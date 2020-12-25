@@ -1,6 +1,6 @@
 # qMaps
 ## About
-Custom background setup for Qlik Maps.
+Custom setup for Qlik Default Map.
 Autogenerate tiles and LAT, LONG data.
 
 ![Floor Plan](doc/FloorPlan/FloorPlan.gif)
@@ -17,9 +17,30 @@ Generated Mask for LAT, LONG calculation
 ![Generated Mask](doc/FloorPlan/GeneratedMask.png) 
 Generated files for TMS
 ![TMS tiles](doc/FloorPlan/GeneratedTiles.gif)
-LAT, LONG CSV
+Generated LAT, LONG CSV
 [CSV output](output.csv)
 
 ## Code Sample
 
 Full code - [CustomTMS.py](CustomTMS.py)
+
+## How to setup
+
+* Update these variables i.e. file location and output folder setup 
+
+```python
+imgPath = './Floor_Plan.jpg'
+pointImgPath = './Floor_Plan_marked.jpg'
+outputFolder = './Output/'
+```
+* Run the python script -> Tiles and cvs data will be generated.
+
+* Use generated tiles for TMS or past files under Documents\Qlik\Sense\Content\Default\TMS\FloorMap for local use
+
+* In Qlik Sense Map backgroud layer. Select TMS and use url : ='http://localhost:4848/content/default/TMS/FloorMap/tile_z{z}_x{x}_y{y}.png'
+
+* Load CSV data and Add LAT, LONG data.
+
+
+
+
