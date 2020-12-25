@@ -45,9 +45,9 @@ CONST_ORIGIN = (-20037508, 20037508)
 
 * Run the python script -> Tiles and cvs data will be generated.
 
-* Use generated tiles for TMS or past files under Documents\Qlik\Sense\Content\Default\TMS\FloorMap for local use
+* Use generated tiles for Onlt TMS or past files under Documents\Qlik\Sense\Content\Default\TMS\FloorMap.
 
-* In Qlik Sense Map backgroud layer. Select TMS and use url : ='http://localhost:4848/content/default/TMS/FloorMap/tile_z{z}_x{x}_y{y}.png'
+* In Qlik Sense Map backgroud layer. Select TMS and Online link or use url : ='http://localhost:4848/content/default/TMS/FloorMap/tile_z{z}_x{x}_y{y}.png'
 
 * Load CSV data and Add LAT, LONG data.
 
