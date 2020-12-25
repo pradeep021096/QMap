@@ -6,7 +6,7 @@ Autogenerate tiles and LAT, LONG data.
 ![Floor Plan](doc/FloorPlan/FloorPlan.gif)
 
 ## Input Samples
-Custom map and greyscale version with red marked points. 
+Custom map and a greyscale version with red marked points. 
 
 ![Custom Map](doc/FloorPlan/FloorPlan.jpg)
 ![marked Map](doc/FloorPlan/FloorPlan_marked.jpg)
@@ -26,7 +26,7 @@ Full code - [CustomTMS.py](CustomTMS.py)
 
 ## How to setup
 
-* Update these variables i.e. file location and output folder setup 
+* Update  file location and output folder path variables
 
 ```python
 imgPath = './Floor_Plan.jpg'
@@ -43,11 +43,11 @@ CONST_TOTAL = (40075016, -40075016)
 CONST_ORIGIN = (-20037508, 20037508)
 ```
 
-* Run the python script -> Tiles and cvs data will be generated.
+* Run the python script to generate Tiles and CSV data files.
 
-* Use generated tiles for Onlt TMS or past files under Documents\Qlik\Sense\Content\Default\TMS\FloorMap.
+* Past files under Documents\Qlik\Sense\Content\Default\TMS\FloorMap.
 
-* In Qlik Sense Map backgroud layer. Select TMS and Online link or use url : ='http://localhost:4848/content/default/TMS/FloorMap/tile_z{z}_x{x}_y{y}.png'
+* In Qlik Sense Map backgroud layer. Select TMS and use url : ='http://localhost:4848/content/default/TMS/FloorMap/tile_z{z}_x{x}_y{y}.png'
 
 * Load CSV data and Add LAT, LONG data.
 
