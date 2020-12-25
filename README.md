@@ -33,6 +33,16 @@ imgPath = './Floor_Plan.jpg'
 pointImgPath = './Floor_Plan_marked.jpg'
 outputFolder = './Output/'
 ```
+* Change other control variables if required
+```
+zoom_limit = 4
+tile_size = 256
+bg_color = (255,255,255)
+
+CONST_TOTAL = (40075016, -40075016)
+CONST_ORIGIN = (-20037508, 20037508)
+```
+
 * Run the python script -> Tiles and cvs data will be generated.
 
 * Use generated tiles for TMS or past files under Documents\Qlik\Sense\Content\Default\TMS\FloorMap for local use
