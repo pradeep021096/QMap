@@ -51,7 +51,7 @@ CONST_ORIGIN = (-20037508, 20037508)
 
 * In Qlik Sense Map backgroud layer. Select TMS and use url : ='http://localhost:4848/content/default/TMS/FloorMap/tile_z{z}_x{x}_y{y}.png'
 
-* Load CSV data and Add LAT, LONG data.
+* Load Generated CSV and ADD LAT, LONG data.
 
 
 
