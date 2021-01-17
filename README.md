@@ -1,4 +1,4 @@
-# QMaps
+# QMap
 ## About
 Custom setup for Qlik Default Map.
 Autogenerate tiles and LAT, LONG data.
