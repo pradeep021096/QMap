@@ -28,11 +28,6 @@ import numpy as np
 import cv2
 
 
-'''
-	QMapUtil : Utility functions to Automate and integration Custom map in Qlik
-'''
-
-
 class QMapUtil:
 
     '''
