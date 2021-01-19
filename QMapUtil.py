@@ -31,13 +31,15 @@ import cv2
 '''
 	QMapUtil : Utility functions to Automate and integration Custom map in Qlik
 '''
+
+
 class QMapUtil:
 
     '''
-        CONST_TOTAL: Default Geo Bounds for Qlik Map Obejct
+        CONST_TOTAL: Default Geo Bounds for Qlik Map Object
         CONST_ORIGION: Default (0,0) Geo Origin
         CONST_TILE_SIZE: Tile size | 256px Grid
-        CONST_BG_COLOR: 
+        CONST_BG_COLOR: Default background color | Used in _simplify
     '''
 
     CONST_TOTAL = (40075016, -40075016)
@@ -67,7 +69,6 @@ class QMapUtil:
     def getGreyScaleImage(img):
         return ImageOps.grayscale(img)
 
-    
     '''
         Store PIL Image
         Args: 
@@ -125,7 +126,7 @@ class QMapUtil:
 
             imgTemp = img.resize((gridSize, gridSize))
             QMapUtil._tmsStore(imgTemp, gridCount, zoom, output_folder)
-        
+
         return True
 
     '''
@@ -254,9 +255,12 @@ class QMapUtil:
 
         return output_file_path
 
+
 '''
     Sample Usage Calls
 '''
+
+
 def main():
 
     img_Path = './Floor_Plan.jpg'
