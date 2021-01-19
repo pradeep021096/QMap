@@ -24,25 +24,27 @@ Generated LAT, LONG
 
 ## Code Sample
 
-Full code - [CustomTMS.py](CustomTMS.py)
+Full code - [QMapUtil.py](QMapUtil.py)
 
 ## How to setup
 
-* Update  file location and output folder path variables
+* Sample Code for QMapUtil Features 
 
 ```python
-imgPath = './Floor_Plan.jpg'
-pointImgPath = './Floor_Plan_marked.jpg'
-outputFolder = './Output/'
+img_Path = './Floor_Plan.jpg'
+img = QMapUtil.getImage(img_Path)
+QMapUtil.generateMapTile(img, output_folder='./Output/', zoom_limit=4)
+
+marked_img_Path = './Floor_Plan_marked.jpg'
+marked_img = QMapUtil.getImage(marked_img_Path)
+QMapUtil.extractGeoData(marked_img, save_mask=True)
 ```
 * Change other control variables if required
 ```
-zoom_limit = 4
-tile_size = 256
-bg_color = (255,255,255)
-
-CONST_TOTAL = (40075016, -40075016)
-CONST_ORIGIN = (-20037508, 20037508)
+    CONST_TOTAL = (40075016, -40075016)
+    CONST_ORIGIN = (-20037508, 20037508)
+    CONST_TILE_SIZE = 256
+    CONST_BG_COLOR = (255, 255, 255)
 ```
 
 * Run the python script to generate Tiles and CSV data files.
