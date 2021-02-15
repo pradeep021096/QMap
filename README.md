@@ -56,13 +56,13 @@ Full code - [QMapUtil.py](QMapUtil.py)
     CONST_BG_COLOR = (255, 255, 255)
 ```
 
-* Run the python script to generate Tiles and CSV data files.
+* Run the python script to generate Tiles, CSV , Simple KML data files.
 
-* Past files under Documents\Qlik\Sense\Content\Default\TMS\FloorMap.
+* For Image Tiles -> Place Files under Documents\Qlik\Sense\Content\Default\TMS\FloorMap.
 
 * In Qlik Sense Map backgroud layer. Select TMS and use url : ='http://localhost:4848/content/default/TMS/FloorMap/tile_z{z}_x{x}_y{y}.png'
 
-* Load Generated CSV or KML data.
+* Load Generated CSV, KML data.
 
 
 
