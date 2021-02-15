@@ -26,7 +26,7 @@ import csv
 from PIL import Image, ImageOps
 import numpy as np
 import cv2
-
+from simplekml import Kml
 
 class QMapUtil:
 
@@ -249,6 +249,55 @@ class QMapUtil:
         output_file_path = QMapUtil._storeCSV(centroids, output_folder, img)
 
         return output_file_path
+    '''
+        Find contours from simplified poly image
+        Args:
+            img: PIL Image | simplified Red Polygon image
+        Return:
+            List of List [[data]..] : Polygon list with [y,x]
+    '''
+    @staticmethod
+    def _findPoly(img):
+        
+        contours, hierarchy = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+        result = []
+        for poly in contours:
+            poly_list = np.vstack(poly).squeeze().tolist()
+            poly_list.append(poly_list[0])
+            result.append(poly_list)
+        return result
+
+    '''
+        Generate Simple KML File
+        Args:
+            img : PIL Image | simplified Red Polygon image
+            output_folder: Target folder | Default is current directory
+            save_mask: to save generated mask | For Debugging
+        Return:
+            string : KML File path
+    '''
+    @staticmethod
+    def generateKML(img, output_folder='./', save_mask=False):
+        
+        img = QMapUtil._simplify(img.convert('RGB'))
+        mask = QMapUtil._redMask(img, save_mask)
+
+        polygons = QMapUtil._findPoly(mask)
+        file_kml = Kml()
+        i = 0 
+        
+        for poly in polygons:
+            i+=1
+            result = [] 
+            for data in poly:
+                x,y = QMapUtil._geoCoordinate(data[0],data[1],img)
+                result.append([y,x])
+
+            file_kml.newpolygon(name = '_'+str(i), outerboundaryis = result )
+
+        file_kml.save( output_folder+'output.kml')
+        
+        return output_folder+'output.kml'
 
 
 '''
@@ -265,6 +314,10 @@ def main():
     marked_img_Path = './Floor_Plan_marked.jpg'
     marked_img = QMapUtil.getImage(marked_img_Path)
     QMapUtil.extractGeoData(marked_img, save_mask=True)
+
+    poly_img_Path = './Body_Poly.jpg'
+    img = QMapUtil.getImage(poly_img_Path)
+    QMapUtil.generateKML(img, output_folder='./Output/', save_mask=True)
 
 
 if __name__ == '__main__':
