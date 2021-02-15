@@ -1,26 +1,31 @@
 # QMap
 ## About
 Custom setup for Qlik Default Map.
-Autogenerate tiles and LAT, LONG data.
+Autogenerate Image Tiles, LAT, LONG, Simple KML data.
 
 ![Floor Plan](doc/FloorPlan/FloorPlan.gif)
+
+![Poly_KML](doc/FloorPlan/Generate_KML_from_Image.gif)
 
 ## Input Samples
 Custom map and a greyscale version with red marked points. 
 
 ![Custom Map](doc/FloorPlan/FloorPlan.jpg)
 ![marked Map](doc/FloorPlan/FloorPlan_marked.jpg)
-
+![marked BodyMap](/Body_Poly.jpg)
 ## Output Samples
 
 Generated Mask for LAT, LONG calculation
-![Generated Mask](doc/FloorPlan/GeneratedMask.png) 
+![Generated Mask](doc/FloorPlan/GeneratedMask.png)
+![Generated PolyMask](GeneratedMask_Poly.png) 
+
 
 Generated files for TMS
 ![TMS tiles](doc/FloorPlan/GeneratedTiles.gif)
 
-Generated LAT, LONG
+Generated
 [CSV output](output.csv)
+[KML output](output.kml)
 
 ## Code Sample
 
@@ -31,13 +36,17 @@ Full code - [QMapUtil.py](QMapUtil.py)
 * Sample Code for QMapUtil Features 
 
 ```python
-img_Path = './Floor_Plan.jpg'
-img = QMapUtil.getImage(img_Path)
-QMapUtil.generateMapTile(img, output_folder='./Output/', zoom_limit=4)
+    img_Path = './Floor_Plan.jpg'
+    img = QMapUtil.getImage(img_Path)
+    QMapUtil.generateMapTile(img, output_folder='./Output/', zoom_limit=4)
 
-marked_img_Path = './Floor_Plan_marked.jpg'
-marked_img = QMapUtil.getImage(marked_img_Path)
-QMapUtil.extractGeoData(marked_img, save_mask=True)
+    marked_img_Path = './Floor_Plan_marked.jpg'
+    marked_img = QMapUtil.getImage(marked_img_Path)
+    QMapUtil.extractGeoData(marked_img, save_mask=True)
+
+    poly_img_Path = './Body_Poly.jpg'
+    img = QMapUtil.getImage(poly_img_Path)
+    QMapUtil.generateKML(img, output_folder='./Output/', save_mask=True)
 ```
 * Change other control variables if required
 ```
@@ -53,7 +62,7 @@ QMapUtil.extractGeoData(marked_img, save_mask=True)
 
 * In Qlik Sense Map backgroud layer. Select TMS and use url : ='http://localhost:4848/content/default/TMS/FloorMap/tile_z{z}_x{x}_y{y}.png'
 
-* Load Generated CSV and ADD LAT, LONG data.
+* Load Generated CSV or KML data.
 
 
 
