@@ -186,21 +186,21 @@ class QMapUtil:
         Args:
             img: PIL image
             save_mask: to save generated mask | For Debugging
+            kernel_size: Kernel size for Image Blurring | odd int
 		Return 
             Mask: Array representation of mask Image
 	'''
     @staticmethod
-    def _redMask(img, save_mask=False):
+    def _redMask(img, save_mask=False, kernel_size = 3):
 
         img = np.array(img)
-        blur = cv2.medianBlur(img, 5)
+        blur = cv2.blur(img, (kernel_size,kernel_size))
         hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
 
         red_lower = np.array([120, 210, 230])
         red_upper = np.array([180, 255, 255])
 
         mask = cv2.inRange(hsv, red_lower, red_upper)
-        mask = cv2.medianBlur(mask, 5)
 
         if save_mask:
             cv2.imwrite("GeneratedMask.png", mask)
@@ -236,14 +236,15 @@ class QMapUtil:
             img: PIL Image | greyscale version of original image with red blobs / dots
             output_folder: Target folder | Default is current directory
             save_mask: Save Generated Mask | Always saves in current working Directory | Use if Debugging
+            kernel_size: Kernel size for Image Blurring | odd int
 		Return: 
             file path
 	'''
     @staticmethod
-    def extractGeoData(img, output_folder='./', save_mask=False):
+    def extractGeoData(img, output_folder='./', save_mask=False, kernel_size = 3):
 
         img = QMapUtil._simplify(img.convert('RGB'))
-        mask = QMapUtil._redMask(img, save_mask)
+        mask = QMapUtil._redMask(img, save_mask,kernel_size)
         centroids = QMapUtil._centroids(mask)
 
         output_file_path = QMapUtil._storeCSV(centroids, output_folder, img)
@@ -273,14 +274,15 @@ class QMapUtil:
             img : PIL Image | simplified Red Polygon image
             output_folder: Target folder | Default is current directory
             save_mask: to save generated mask | For Debugging
+            kernel_size: Kernel size for Image Blurring | odd int
         Return:
             string : KML File path
     '''
     @staticmethod
-    def generateKML(img, output_folder='./', save_mask=False):
+    def generateKML(img, output_folder='./', save_mask=False, kernel_size = 1):
         
         img = QMapUtil._simplify(img.convert('RGB'))
-        mask = QMapUtil._redMask(img, save_mask)
+        mask = QMapUtil._redMask(img, save_mask, kernel_size)
 
         polygons = QMapUtil._findPoly(mask)
         file_kml = Kml()
