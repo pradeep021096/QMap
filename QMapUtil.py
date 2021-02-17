@@ -182,25 +182,50 @@ class QMapUtil:
         return centroids
 
     '''
-        Create Mask for Red Color
+        Blur image
+        Args:
+            img: PIL image
+            kernel_size: Kernel size for Image Blurring | odd int
+            blur_type: define different blurring techniques
+        Return:
+            blured image
+    '''
+    @staticmethod
+    def _blur(img, kernel_size = 3, blur_type = 1):
+
+        if blur_type == 1:
+            img = cv2.blur(img, (kernel_size,kernel_size))
+        else:
+            img = cv2.medianBlur(img, kernel_size)
+        
+        return img
+
+    '''
+        Create Mask for Red Saturation Color
         Args:
             img: PIL image
             save_mask: to save generated mask | For Debugging
             kernel_size: Kernel size for Image Blurring | odd int
+            blur_type: define different blurring techniques
+            double_blur: Blur mask
 		Return 
             Mask: Array representation of mask Image
 	'''
     @staticmethod
-    def _redMask(img, save_mask=False, kernel_size = 3):
+    def _redMask(img, save_mask=False, kernel_size = 3, blur_type = 1, double_blur = False):
 
         img = np.array(img)
-        blur = cv2.blur(img, (kernel_size,kernel_size))
+
+        blur = QMapUtil._blur(img,kernel_size,blur_type)
         hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
 
-        red_lower = np.array([120, 210, 230])
-        red_upper = np.array([180, 255, 255])
+        lower_red = np.array([80,20,20])
+        upper_red = np.array([180,255,255])
 
-        mask = cv2.inRange(hsv, red_lower, red_upper)
+        mask = cv2.inRange(hsv,lower_red,upper_red)
+
+        if double_blur:
+            mask = QMapUtil._blur(mask,kernel_size,blur_type)
 
         if save_mask:
             cv2.imwrite("GeneratedMask.png", mask)
@@ -241,10 +266,10 @@ class QMapUtil:
             file path
 	'''
     @staticmethod
-    def extractGeoData(img, output_folder='./', save_mask=False, kernel_size = 3):
+    def extractGeoData(img, output_folder='./', save_mask=False, kernel_size = 5):
 
         img = QMapUtil._simplify(img.convert('RGB'))
-        mask = QMapUtil._redMask(img, save_mask,kernel_size)
+        mask = QMapUtil._redMask(img, save_mask,kernel_size,blur_type=2,double_blur=True)
         centroids = QMapUtil._centroids(mask)
 
         output_file_path = QMapUtil._storeCSV(centroids, output_folder, img)
@@ -275,13 +300,18 @@ class QMapUtil:
             output_folder: Target folder | Default is current directory
             save_mask: to save generated mask | For Debugging
             kernel_size: Kernel size for Image Blurring | odd int
+            smooth_zoom: Scale image for smoothing | no affect after 10 <Temp Solution>
         Return:
             string : KML File path
     '''
     @staticmethod
-    def generateKML(img, output_folder='./', save_mask=False, kernel_size = 1):
+    def generateKML(img, output_folder='./', save_mask=False, kernel_size = 1, smooth_zoom = 1):
         
         img = QMapUtil._simplify(img.convert('RGB'))
+        
+        width, height = img.size
+        img = img.resize((width * smooth_zoom, height*smooth_zoom))
+
         mask = QMapUtil._redMask(img, save_mask, kernel_size)
 
         polygons = QMapUtil._findPoly(mask)
@@ -289,8 +319,10 @@ class QMapUtil:
         i = 0 
         
         for poly in polygons:
+            
             i+=1
             result = [] 
+
             for data in poly:
                 x,y = QMapUtil._geoCoordinate(data[0],data[1],img)
                 result.append([y,x])
@@ -319,7 +351,7 @@ def main():
 
     poly_img_Path = './Body_Poly.jpg'
     img = QMapUtil.getImage(poly_img_Path)
-    QMapUtil.generateKML(img, output_folder='./Output/', save_mask=True)
+    QMapUtil.generateKML(img, output_folder='./Output/', save_mask=True, smooth_zoom=5)
 
 
 if __name__ == '__main__':
