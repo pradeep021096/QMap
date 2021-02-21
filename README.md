@@ -7,6 +7,11 @@ Autogenerate Image Tiles, LAT, LONG, Simple KML data.
 
 ![Poly_KML](doc/FloorPlan/Generate_KML_from_Image.gif)
 
+![Body Map](doc/Body%20Map.gif)
+
+![Raw extract](doc/QMap_nested_New.gif)
+
+
 ## Input Samples
 Custom map and a greyscale version with red marked points. 
 
@@ -46,7 +51,7 @@ Full code - [QMapUtil.py](QMapUtil.py)
 
     poly_img_Path = './Body_Poly.jpg'
     img = QMapUtil.getImage(poly_img_Path)
-    QMapUtil.generateKML(img, output_folder='./Output/', save_mask=True)
+    QMapUtil.generateKML(img, output_folder='./', save_mask=True, method = 1 , smooth_zoom=3)
 ```
 * Change other control variables if required
 ```
