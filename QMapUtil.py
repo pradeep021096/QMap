@@ -161,10 +161,8 @@ class QMapUtil:
     def _geoCoordinate(x, y, img):
 
         width, height = img.size
-        logitude = round(
-            x * QMapUtil.CONST_TOTAL[0] / width + QMapUtil.CONST_ORIGIN[0])
-        latitude = round(
-            y * QMapUtil.CONST_TOTAL[1] / height + QMapUtil.CONST_ORIGIN[1])
+        logitude = round(x * QMapUtil.CONST_TOTAL[0] / width + QMapUtil.CONST_ORIGIN[0])
+        latitude = round(y * QMapUtil.CONST_TOTAL[1] / height + QMapUtil.CONST_ORIGIN[1])
 
         return latitude, logitude
 
@@ -279,14 +277,20 @@ class QMapUtil:
         Find contours from simplified poly image
         Args:
             img: PIL Image | simplified Red Polygon image
+            method: 0 - Raw, 1 - Outline
         Return:
             List of List [[data]..] : Polygon list with [y,x]
     '''
     @staticmethod
-    def _findPoly(img):
+    def _findPoly(img, method = 1):
+
+        if method:
+            contours, hierarchy = cv2.findContours(img, cv2.RETR_CCOMP , cv2.CHAIN_APPROX_SIMPLE)
+        else:
+            contours, hierarchy = cv2.findContours(img, cv2.RETR_EXTERNAL , cv2.CHAIN_APPROX_SIMPLE)
         
-        contours, hierarchy = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
         result = []
+
         for poly in contours:
             poly_list = np.vstack(poly).squeeze().tolist()
             poly_list.append(poly_list[0])
@@ -299,13 +303,14 @@ class QMapUtil:
             img : PIL Image | simplified Red Polygon image
             output_folder: Target folder | Default is current directory
             save_mask: to save generated mask | For Debugging
+            method: 0 - Raw, 1 - Outline
             kernel_size: Kernel size for Image Blurring | odd int
             smooth_zoom: Scale image for smoothing | no affect after 10 <Temp Solution>
         Return:
             string : KML File path
     '''
     @staticmethod
-    def generateKML(img, output_folder='./', save_mask=False, kernel_size = 1, smooth_zoom = 1):
+    def generateKML(img, output_folder='./', save_mask=False , method = 1, kernel_size = 1, smooth_zoom = 1):
         
         img = QMapUtil._simplify(img.convert('RGB'))
         
@@ -314,12 +319,11 @@ class QMapUtil:
 
         mask = QMapUtil._redMask(img, save_mask, kernel_size)
 
-        polygons = QMapUtil._findPoly(mask)
+        polygons = QMapUtil._findPoly(mask, method)
         file_kml = Kml()
         i = 0 
         
         for poly in polygons:
-            
             i+=1
             result = [] 
 
@@ -327,7 +331,7 @@ class QMapUtil:
                 x,y = QMapUtil._geoCoordinate(data[0],data[1],img)
                 result.append([y,x])
 
-            file_kml.newpolygon(name = '_'+str(i), outerboundaryis = result )
+            file_kml.newpolygon(name = str(i), outerboundaryis = result )
 
         file_kml.save( output_folder+'output.kml')
         
@@ -351,8 +355,9 @@ def main():
 
     poly_img_Path = './Body_Poly.jpg'
     img = QMapUtil.getImage(poly_img_Path)
-    QMapUtil.generateKML(img, output_folder='./Output/', save_mask=True, smooth_zoom=5)
+    QMapUtil.generateKML(img, output_folder='./', save_mask=True, method = 1 , smooth_zoom=3)
 
 
 if __name__ == '__main__':
+
     main()
